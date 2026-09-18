@@ -16,7 +16,7 @@
     "naughty-util": "^0.7.0"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.7",
     "c8": "^11.0.0",
     "typescript": "^6.0.3"
   }
