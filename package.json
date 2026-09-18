@@ -1,0 +1,23 @@
+{
+  "name": "collector",
+  "version": "0.0.1",
+  "exports": "./main.js",
+  "types": "./main.d.ts",
+  "author": "NaughtySora <naughtysora@proton.me>",
+  "keywords": [
+    "nodejs",
+    "async",
+    "collector"
+  ],
+  "scripts": {
+    "test": "c8 node test/index.js"
+  },
+  "dependencies": {
+    "naughty-util": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "c8": "^11.0.0",
+    "typescript": "^6.0.3"
+  }
+}
