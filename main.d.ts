@@ -6,7 +6,6 @@ export class KeyCollector<T extends string> {
   signal(value: AbortSignal): this;
   set(key: T, value: any): boolean;
   then: Promise<any>["then"];
-  reassign<T extends string>(keys: T[]): KeyCollector<T>;
   take<C extends Callback>(key: T, callback: C, ...args: OmitLast<Parameters<C>>): this;
   wait(key: T, promise: Promise<any>): this;
   all(dataset: Partial<Record<T, Promise<any>>>): this;

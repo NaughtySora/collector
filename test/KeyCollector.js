@@ -82,26 +82,6 @@ describe("KeyCollector", async () => {
     );
   });
 
-  await it("reassign", async () => {
-    const c = new KeyCollector(["p0"]);
-    setTimeout(() => {
-      c.set("p0", 1);
-    }, 350);
-    const { p0 } = await c;
-    assert.equal(p0, 1);
-    assert.throws(() => {
-      c.reassign()
-    }, { message: "keys should be a valid array" });
-    c.reassign(["a", "b"]);
-    setTimeout(() => {
-      c.set("a", 1);
-      c.set("b", 2);
-    }, 350);
-    const { a, b } = await c;
-    assert.equal(a, 1);
-    assert.equal(b, 2);
-  });
-
   await it("failing", () => {
     const c = new KeyCollector(["a", "b", "c"]);
     assert.rejects(async () => {
@@ -110,5 +90,29 @@ describe("KeyCollector", async () => {
         .wait("a", async.resolve(50, 1))
         .wait("c", async.resolve(250, 2));
     }, { message: "Promise reject timeout" });
+  });
+
+  await it("many awaits", async () => {
+    const c = new KeyCollector(["a", "b", "c"]);
+    const data = await c
+      .wait("b", async.resolve(125, 2))
+      .wait("a", async.resolve(50, 1))
+      .wait("c", async.resolve(250, 3));
+    assert.ok(data === await c)
+  });
+
+  await it("many awaits - rejected", async () => {
+    const c0 = new KeyCollector(["a", "b", "c"]);
+    const c1 = new KeyCollector(["1", "2"]);
+    c0
+      .wait("b", async.reject(125))
+      .wait("a", async.resolve(50, 1))
+      .wait("c", async.resolve(250, 3));
+
+    c0.then(null, c1.set.bind(c1, "1"));
+    c0.then(null, c1.set.bind(c1, "2"));
+
+    const errors = await c1;
+    assert.ok(errors["1"] === errors["2"]);
   });
 });

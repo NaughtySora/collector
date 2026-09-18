@@ -1,6 +1,6 @@
 {
   "name": "collector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "exports": "./main.js",
   "types": "./main.d.ts",
   "author": "NaughtySora <naughtysora@proton.me>",
