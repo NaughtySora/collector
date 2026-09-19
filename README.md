@@ -12,23 +12,20 @@ Current implantation includes only KeyColletor due to very common and clear usag
 const fs = require("node:fs");
 const SomeAsyncContext = async () => {
   const collector = new KeyCollector(["file", "api"]);
-  collector.take("file", fs.readFile, "file.txt"); // using errback (callback last, error first api)
+  // using errback (callback last, error first api)
+  collector.take("file", fs.readFile, "file.txt"); 
   collector.wait("api", api.getData("url"));
   const data = await collector;
   data.file // bytes
-  data.api // result from api
+  data.api  // result from api
 };
 ```
 
 ## Error handling
-```js
-const SomeAsyncContext = async () => {
-  const collector = new KeyCollector(["a", "b"]);
-  collector.all({ a: api.callA(), b: api.callB() });
-};
-```
 ### try/catch
 ```js
+  const collector = new KeyCollector(["a", "b"]);
+  collector.all({ a: api.callA(), b: api.callB() });
   try {
     const data = await collector;
     data.a;
@@ -39,6 +36,8 @@ const SomeAsyncContext = async () => {
 ```
 ### thenable contract
 ```js
+  const collector = new KeyCollector(["a", "b"]);
+  collector.all({ a: api.callA(), b: api.callB() });
   const onSuccess = (data) => {
     data.a;
     data.b;
@@ -47,5 +46,4 @@ const SomeAsyncContext = async () => {
     error;
   };
   collector.then(onSuccess, onError);
-};
 ```
