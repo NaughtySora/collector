@@ -115,4 +115,25 @@ describe("KeyCollector", async () => {
     const errors = await c1;
     assert.ok(errors["1"] === errors["2"]);
   });
+
+  it('collector as a storage', async () => {
+    const c = new KeyCollector(["a", "b", "c"]);
+    c
+      .wait("b", async.resolve(125, 2))
+      .wait("a", async.resolve(50, 1))
+      .wait("c", async.resolve(250, 3));
+
+    try {
+      const initialResolve = await c;
+      assert.equal(initialResolve.a, 1);
+      assert.equal(initialResolve.b, 2);
+      assert.equal(initialResolve.c, 3);
+    } catch { }
+    // getting data again, second call is sync
+    c.then((data) => {
+      assert.equal(data.a, 1);
+      assert.equal(data.b, 2);
+      assert.equal(data.c, 3);
+    });
+  });
 });
